@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Penjualan - Sultan Store</title>
+    <style>
+        :root { --primary: #ff4757; --bg: #0a0a0a; --card: #161616; --green: #00ff88; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; }
+        .container { max-width: 1000px; margin: auto; }
+        h1 { color: var(--primary); text-align: center; border-bottom: 2px solid #222; padding-bottom: 15px; }
+        
+        .card-rekap { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+        .info-user b { color: var(--green); font-size: 1.1rem; }
+        .info-game { text-align: right; }
+        .price-tag { color: var(--gold); font-weight: bold; font-size: 1.2rem; }
+        
+        table { width: 100%; background: var(--card); border-radius: 10px; overflow: hidden; margin-top: 20px; border-collapse: collapse; }
+        th { background: #222; color: var(--primary); padding: 15px; text-align: left; font-size: 0.8rem; }
+        td { padding: 15px; border-bottom: 1px solid #222; font-size: 0.85rem; }
+        .status { padding: 4px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; background: rgba(255, 165, 2, 0.2); color: orange; }
+        
+        .btn-reset { background: #ff4757; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; float: right; margin-bottom: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📋 DATA TRANSAKSI MASUK</h1>
+    <button class="btn-reset" onclick="bersihkanData()">HAPUS SEMUA</button>
+    
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>WAKTU</th>
+                    <th>DETAIL USER</th>
+                    <th>GAME & ID</th>
+                    <th>ITEM</th>
+                    <th>PEMBAYARAN</th>
+                    <th>TOTAL</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody id="list-transaksi">
+                </tbody>
+        </table>
+    </div>
+    <div id="pesan-kosong" style="text-align:center; margin-top:50px; color:#555; display:none;">
+        <h3>Belum ada transaksi hari ini, Wak!</h3>
+    </div>
+</div>
+
+<script>
+    function tampilkanData() {
+        const data = JSON.parse(localStorage.getItem('riwayat_sultan')) || [];
+        const container = document.getElementById('list-transaksi');
+        const pesan = document.getElementById('pesan-kosong');
+
+        if(data.length === 0) {
+            pesan.style.display = "block";
+            return;
+        }
+
+        // Urutkan dari yang terbaru
+        data.reverse().forEach(item => {
+            const row = `
+                <tr>
+                    <td>${item.waktu}</td>
+                    <td><b>${item.user}</b><br><small>${item.wa}</small></td>
+                    <td><span style="color:var(--green)">${item.game}</span><br>ID: ${item.id} (${item.server})</td>
+                    <td>${item.item}</td>
+                    <td>${item.metode}<br><small>${item.noDompet}</small></td>
+                    <td style="font-weight:bold">Rp ${item.total.toLocaleString()}</td>
+                    <td><span class="status">${item.status}</span></td>
+                </tr>
+            `;
+            container.innerHTML += row;
+        });
+    }
+
+    function bersihkanData() {
+        if(confirm("Yakin mau hapus semua riwayat transaksi?")) {
+            localStorage.removeItem('riwayat_sultan');
+            location.reload();
+        }
+    }
+
+    window.onload = tampilkanData;
+</script>
+</body>
+</html>
