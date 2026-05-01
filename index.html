@@ -3,90 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rekap Penjualan - Sultan Store</title>
+    <title>Halaman Login Khusus</title>
     <style>
-        :root { --primary: #ff4757; --bg: #0a0a0a; --card: #161616; --green: #00ff88; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; }
-        .container { max-width: 1000px; margin: auto; }
-        h1 { color: var(--primary); text-align: center; border-bottom: 2px solid #222; padding-bottom: 15px; }
-        
-        .card-rekap { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
-        .info-user b { color: var(--green); font-size: 1.1rem; }
-        .info-game { text-align: right; }
-        .price-tag { color: var(--gold); font-weight: bold; font-size: 1.2rem; }
-        
-        table { width: 100%; background: var(--card); border-radius: 10px; overflow: hidden; margin-top: 20px; border-collapse: collapse; }
-        th { background: #222; color: var(--primary); padding: 15px; text-align: left; font-size: 0.8rem; }
-        td { padding: 15px; border-bottom: 1px solid #222; font-size: 0.85rem; }
-        .status { padding: 4px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; background: rgba(255, 165, 2, 0.2); color: orange; }
-        
-        .btn-reset { background: #ff4757; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; float: right; margin-bottom: 10px; font-weight: bold; }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; margin: 0; }
+        .login-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; }
+        h2 { text-align: center; color: #333; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        #error-msg { color: red; font-size: 14px; text-align: center; display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>📋 DATA TRANSAKSI MASUK</h1>
-    <button class="btn-reset" onclick="bersihkanData()">HAPUS SEMUA</button>
-    
-    <div style="overflow-x: auto;">
-        <table>
-            <thead>
-                <tr>
-                    <th>WAKTU</th>
-                    <th>DETAIL USER</th>
-                    <th>GAME & ID</th>
-                    <th>ITEM</th>
-                    <th>PEMBAYARAN</th>
-                    <th>TOTAL</th>
-                    <th>STATUS</th>
-                </tr>
-            </thead>
-            <tbody id="list-transaksi">
-                </tbody>
-        </table>
-    </div>
-    <div id="pesan-kosong" style="text-align:center; margin-top:50px; color:#555; display:none;">
-        <h3>Belum ada transaksi hari ini, Wak!</h3>
-    </div>
+<div class="login-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <p id="error-msg">Username atau Password Salah!</p>
+    <button onclick="checkLogin()">Masuk</button>
 </div>
 
 <script>
-    function tampilkanData() {
-        const data = JSON.parse(localStorage.getItem('riwayat_sultan')) || [];
-        const container = document.getElementById('list-transaksi');
-        const pesan = document.getElementById('pesan-kosong');
+    function checkLogin() {
+        const userInput = document.getElementById('username').value;
+        const passInput = document.getElementById('password').value;
+        const errorMsg = document.getElementById('error-msg');
 
-        if(data.length === 0) {
-            pesan.style.display = "block";
-            return;
-        }
+        // Data login sesuai permintaanmu
+        const validUser = "DIRECT BY LEJZZ";
+        const validPass = "SFS MOD";
+        
+        // Link tujuan setelah login berhasil
+        const targetLink = "https://www.mediafire.com/file/eftewvkggn8xtg7/spaceflight-simulator-v1.6.00.18-MOD.7z/file?dkey=kgbi1nqo8dj&r=250"; // Ganti dengan link tujuanmu
 
-        // Urutkan dari yang terbaru
-        data.reverse().forEach(item => {
-            const row = `
-                <tr>
-                    <td>${item.waktu}</td>
-                    <td><b>${item.user}</b><br><small>${item.wa}</small></td>
-                    <td><span style="color:var(--green)">${item.game}</span><br>ID: ${item.id} (${item.server})</td>
-                    <td>${item.item}</td>
-                    <td>${item.metode}<br><small>${item.noDompet}</small></td>
-                    <td style="font-weight:bold">Rp ${item.total.toLocaleString()}</td>
-                    <td><span class="status">${item.status}</span></td>
-                </tr>
-            `;
-            container.innerHTML += row;
-        });
-    }
-
-    function bersihkanData() {
-        if(confirm("Yakin mau hapus semua riwayat transaksi?")) {
-            localStorage.removeItem('riwayat_sultan');
-            location.reload();
+        if (userInput === validUser && passInput === validPass) {
+            window.location.href = targetLink;
+        } else {
+            errorMsg.style.display = 'block';
         }
     }
-
-    window.onload = tampilkanData;
 </script>
+
 </body>
 </html>
